@@ -86,7 +86,7 @@ clear all
 % (1) Make a plot of the average p-value for the t-test comparing N random
 % numbers chosen from each of these two distributions as a function of N.
 
-for N = 2:100
+for N = 2:50
     for ii = 1:100
     Gaus0 = randn(N,1);
     Gaus1 = randn(N,1)+1;
@@ -95,8 +95,10 @@ for N = 2:100
     avgPval(N) = mean(pval);
 end
 
-figure(8); plot(1:100,avgPval,'b.');
+figure(8); plot(1:50,avgPval,'b.')
 
+%%
+clear all
 
 % Part 2. Now keep the first distribution the same, but vary the mean of
 % the second distribution between 0 and 10 with the same variance and
@@ -104,24 +106,63 @@ figure(8); plot(1:100,avgPval,'b.');
 % set of axes. What is special about the case where the mean of the second
 % distribution is 0? 
 
-for N = 2:100
-    for q = 1:10
+for N = 2:50
+    for q = 1:11
         for ii = 1:100
         Gaus0 = randn(N,1);
-        Gaus1 = randn(N,1)+q;
+        Gaus1 = randn(N,1)+(q-1);
         [is_sig(ii), pval(ii)] = ttest2(Gaus0,Gaus1);
         end
-        avgPval(N,q) = mean(pval);
+        avgPval(q,N) = mean(pval);
     end
     
 end
 
 figure(9);
+lnclr = {'b-','g-','r-','c-','m-','y-','k-','k--','b--','r--'};
+xx = [1:50]; 
 for ii = 1:q
-plot(1:100,avgPval(:,q),'b.');
+plot(xx,avgPval(ii,:))
 hold on;
 end
-
+xlabel('number of samples');ylabel('pvalue');legend('mean Dif = 0','mean Dif = 1','mean Dif = 2','mean Dif = 3',...
+    'mean Dif = 4','mean Dif = 5','mean Dif = 6','mean Dif = 7','mean Dif = 8','mean Dif = 9','mean Dif = 10');
+disp('end q2 part 2')
+%Adam: There is a special case when the means are the same shows that they
+%do not trend towards becoming more different with an increased number of
+%samples in the set. Under the other conditions with different means
+%between the two sets, as sample size increases, so does likely hood that
+%their means will be different. If the means are the same, however, this
+%will never be true.
+%%
 % Part 3. Now keep the means of the two distributions at 0 and 1 as in part
 % 1, but vary the variance of both distributions simultaneiously between 0.1 and 10 and plot the 
 % p-values vs the number of numbers drawn as before. Comment on your results.  
+clear all
+
+for N = 2:100
+    N
+    for q = 1:100
+        for ii = 1:100
+        Gaus0 = (q/10).*randn(N,1);
+        Gaus1 = 1+(q/10).*randn(N,1);
+        [is_sig(ii), pval(ii)] = ttest2(Gaus0,Gaus1);
+        end
+        avgPval(q,N) = mean(pval);
+    end
+end
+
+figure(10);
+xx = [1:100]; 
+for ii = 1:q
+plot(xx,avgPval(ii,:))
+hold on;
+end
+xlabel('number of samples');ylabel('pvalue');
+
+%Adam Howard: The pvalues are the same for each analysis becasue the t-test
+%only measures the difference between the means, but does not take into
+%account the size of the variance within the data. So as we vary the data,
+%no matter how widely, only
+
+
