@@ -52,9 +52,9 @@ hold off;
 clear all
 numopts = 10;
 xx = sort(rand(numopts,1)*10);
-[fit_out,fit_metric] = makeRandFit(xx,1,4);
-[fit_out1,fit_metric1] = makeRandFit(xx,10,5);
-[fit_out2,fit_metric2] = makeRandFit(xx,1000,6);
+[fit_out,fit_metric] = makeRandFit(xx,1);
+[fit_out1,fit_metric1] = makeRandFit(xx,10);
+[fit_out2,fit_metric2] = makeRandFit(xx,1000);
 
 %The difference caused by the nosie from almost no noise (1) to a ten fold
 %increase in nosie was nearly undetecable. The fit function had almost no
@@ -69,7 +69,7 @@ xx = sort(rand(numopts,1)*10);
 clear all
 numopts = 100;
 xx = sort(rand(numopts,1)*10);
-[fit_out,fit_metric] = makeRandFit(xx,1,7);
+[fit_out,fit_metric] = makeRandFit(xx,1);
 
 %The fit function still correctly identifies the regression as a 3rd order
 %fit. The major change is oberserved in the plot of the residuals. The
@@ -92,10 +92,10 @@ for N = 2:100
     Gaus1 = randn(N,1)+1;
     [is_sig(ii), pval(ii)] = ttest2(Gaus0,Gaus1);
     end
-    avgPval(N) = mean(pval);
+    avgPval(N) = mean(pval)
 end
 
-figure(8); plot(1:100,avgPval,'b.');
+
 
 
 % Part 2. Now keep the first distribution the same, but vary the mean of
@@ -103,24 +103,6 @@ figure(8); plot(1:100,avgPval,'b.');
 % repeat part one. Make a plot of all of these different curves on the same
 % set of axes. What is special about the case where the mean of the second
 % distribution is 0? 
-
-for N = 2:100
-    for q = 1:10
-        for ii = 1:100
-        Gaus0 = randn(N,1);
-        Gaus1 = randn(N,1)+q;
-        [is_sig(ii), pval(ii)] = ttest2(Gaus0,Gaus1);
-        end
-        avgPval(N,q) = mean(pval);
-    end
-    
-end
-
-figure(9);
-for ii = 1:q
-plot(1:100,avgPval(:,q),'b.');
-hold on;
-end
 
 % Part 3. Now keep the means of the two distributions at 0 and 1 as in part
 % 1, but vary the variance of both distributions simultaneiously between 0.1 and 10 and plot the 
